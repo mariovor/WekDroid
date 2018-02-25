@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">WekDroid</string>
+    <string name="loading_page_hello">Loading ...</string>
 </resources>
