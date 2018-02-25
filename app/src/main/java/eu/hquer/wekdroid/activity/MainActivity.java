@@ -2,7 +2,6 @@ package eu.hquer.wekdroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -54,8 +53,7 @@ public class MainActivity extends BaseAcitvity {
 
             @Override
             public void onFailure(Throwable t) {
-                TextView textView = findViewById(R.id.textView);
-                textView.setText(t.getMessage());
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
