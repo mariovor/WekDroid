@@ -45,6 +45,7 @@ public class BoardsListAdapter extends RecyclerView.Adapter<BoardCardViewHolder>
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.boards_list_title.setText(board_list.get(position).getTitle());
+        holder.currentBoard = board_list.get(position);
 
     }
 
