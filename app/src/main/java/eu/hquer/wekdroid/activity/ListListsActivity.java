@@ -11,6 +11,7 @@ import java.util.List;
 
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.adapter.ListsListAdapter;
+import eu.hquer.wekdroid.enums.ExtrasEnum;
 import eu.hquer.wekdroid.model.Board;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,8 +32,8 @@ public class ListListsActivity extends RecyclerActivity {
         textView.setText(getString(R.string.lists_name));
         // Get the intent information
         Intent intent = getIntent();
-        board_id = intent.getExtras().getString("board_id");
-        board_title = intent.getExtras().getString("board_title");
+        board_id = intent.getExtras().getString(ExtrasEnum.board_id.getName());
+        board_title = intent.getExtras().getString(ExtrasEnum.board_title.getName());
         // Set the recycler view and adapter
         ListsListAdapter mAdapter = new ListsListAdapter(boardList);
         recyclerView = obtainRecycler(R.id.cardList, mAdapter);
