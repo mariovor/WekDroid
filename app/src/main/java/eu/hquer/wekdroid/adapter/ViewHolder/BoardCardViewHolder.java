@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.activity.ListListsActivity;
@@ -34,7 +33,7 @@ public class BoardCardViewHolder extends RecyclerView.ViewHolder {
                 // item clicked
                 Intent intent = new Intent(v.getContext(), ListListsActivity.class);
                 intent.putExtra("board_title", currentBoard.getTitle());
-                intent.putExtra("board_id", currentBoard.getTitle());
+                intent.putExtra("board_id", currentBoard.get_id());
                 v.getContext().startActivity(intent);
             }
         });

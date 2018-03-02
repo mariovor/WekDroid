@@ -1,21 +1,54 @@
 package eu.hquer.wekdroid.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import eu.hquer.wekdroid.R;
+import eu.hquer.wekdroid.adapter.BoardsListAdapter;
+import eu.hquer.wekdroid.model.Board;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ListListsActivity extends BaseAcitvity {
+public class ListListsActivity extends RecyclerActivity {
     String board_title;
     String board_id;
+    private RecyclerView recyclerView;
+    List<Board> boardList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_lists);
+        setContentView(R.layout.activity_list_boards);
         Intent intent = getIntent();
         board_id = intent.getExtras().getString("board_id");
         board_title = intent.getExtras().getString("board_title");
+        BoardsListAdapter mAdapter = new BoardsListAdapter(boardList);
+        recyclerView = obtainRecycler(R.id.cardList, mAdapter);
+        retrieveListsOfBoard(board_id);
+    }
+
+    public void retrieveListsOfBoard(String board_id){
+        Call<List<Board>> listCall = wekanService.getListOfBoards(board_id, token);
+        listCall.enqueue(new Callback<List<Board>>() {
+            @Override
+            public void onResponse(Response<List<Board>> response) {
+                List<Board> listList = response.body();
+                BoardsListAdapter recyclerViewAdapter = (BoardsListAdapter) recyclerView.getAdapter();
+                recyclerViewAdapter.updateData(listList);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Toast.makeText(ListListsActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+            
     }
 }
