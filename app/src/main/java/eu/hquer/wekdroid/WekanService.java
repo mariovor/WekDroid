@@ -3,8 +3,9 @@ package eu.hquer.wekdroid;
 import java.util.List;
 
 import eu.hquer.wekdroid.model.Board;
-import eu.hquer.wekdroid.model.User;
+import eu.hquer.wekdroid.model.Card;
 import eu.hquer.wekdroid.model.Token;
+import eu.hquer.wekdroid.model.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -25,4 +26,7 @@ public interface WekanService {
 
     @GET("api/boards/{board_id}/lists")
     Call<List<Board>> getListOfBoards(@Path("board_id") String board_id, @Header("Authorization") String authHeader);
+
+    @GET("api/boards/{board_id}/lists/{list_id}")
+    Call<List<Card>> getCardsOfList(@Path("board_id") String board_id, @Path("list_id") String list_id, @Header("Authorization") String authHeader);
 }
