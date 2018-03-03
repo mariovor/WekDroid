@@ -1,12 +1,15 @@
 package eu.hquer.wekdroid.activity;
 
+import android.accounts.Account;
+import android.accounts.AccountAuthenticatorResponse;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
-
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.WekanService;
+import eu.hquer.wekdroid.enums.AuthenticationEnum;
 import eu.hquer.wekdroid.model.Token;
 import eu.hquer.wekdroid.model.User;
 import retrofit2.Call;
@@ -21,9 +24,19 @@ public class MainActivity extends BaseAcitvity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createService();
-        authenticate();
+//        authenticate();
+        if (token == null) {
+            AccountManager accountManager = AccountManager.get(this);
+            Account[] accounts = accountManager.getAccountsByType(AuthenticationEnum.accountType.getName());
+            if (accounts.length == 1) {
+                accountManager.getAuthToken(new AccountAuthenticatorResponse(), accounts[0],AuthenticationEnum.authTokenType,this, new Bundle());
+            } else {
+                startActivity(new Intent(this, AccountsActivity.class));
+            }
+        }
     }
 
+// Use accounts[0] (or whatever number of account) after checking that accounts.length &gt; 1}
 
 
     private Call<Token> authenticate(WekanService wekanService) {
@@ -34,7 +47,7 @@ public class MainActivity extends BaseAcitvity {
         return call;
     }
 
-    public void authenticate(){
+    public void authenticate() {
         Call<Token> authenticateResponse = authenticate(wekanService);
         authenticateResponse.enqueue(new Callback<Token>() {
             @Override
@@ -43,7 +56,7 @@ public class MainActivity extends BaseAcitvity {
                 userId = response.body().getId();
                 token = String.format("Bearer %s", tokenText);
                 Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-                if (token != null){
+                if (token != null) {
                     Intent intent = new Intent(getApplicationContext(), ListBoardsActivity.class);
                     startActivity(intent);
 
