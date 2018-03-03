@@ -1,8 +1,9 @@
 package eu.hquer.wekdroid.activity;
 
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -24,12 +25,28 @@ public class MainActivity extends BaseAcitvity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         createService();
-//        authenticate();
         if (token == null) {
             AccountManager accountManager = AccountManager.get(this);
             Account[] accounts = accountManager.getAccountsByType(AuthenticationEnum.accountType.getName());
             if (accounts.length == 1) {
-                accountManager.getAuthToken(new AccountAuthenticatorResponse(), accounts[0],AuthenticationEnum.authTokenType,this, new Bundle());
+                accountManager.getAuthToken(accounts[0], AuthenticationEnum.authTokenType.getName(), null, this, new AccountManagerCallback<Bundle>() {
+                    @Override
+                    public void run(AccountManagerFuture<Bundle> accountManagerFuture) {
+                        try {
+                            token = (String) accountManagerFuture.getResult().get("authtoken");
+                            if (token!=null){
+                                Intent intent = new Intent(getApplicationContext(), ListBoardsActivity.class);
+                                startActivity(intent);
+                            } else{
+                                Toast.makeText(MainActivity.this, "No token found in account manager, please login", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), AccountsActivity.class));
+                            }
+                        } catch (Exception e) {
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, null);
+                int d = 3;
             } else {
                 startActivity(new Intent(this, AccountsActivity.class));
             }

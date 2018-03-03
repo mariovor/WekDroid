@@ -258,6 +258,7 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
                     userId = response.body().getId();
                     //todo Save it in preferences
                     token = String.format("Bearer %s", tokenText);
+                    createAccount(mUsername, mPassword, token);
                 }
 
                 @Override
@@ -267,7 +268,6 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
             });
 
 
-            createAccount(mUsername, mPassword, token);
             return true;
         }
 
