@@ -9,7 +9,7 @@ import java.util.List;
 
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.adapter.ViewHolder.ListCardViewHolder;
-import eu.hquer.wekdroid.model.Board;
+import eu.hquer.wekdroid.model.WekanList;
 
 /**
  * Created by mariovor on 25.02.18.
@@ -18,12 +18,14 @@ import eu.hquer.wekdroid.model.Board;
  */
 
 public class ListsListAdapter extends RecyclerView.Adapter<ListCardViewHolder> {
-    private List<Board> board_list;
+    private List<WekanList> list_list;
+    private String board_id;
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ListsListAdapter(List<Board> newList) {
-        board_list = newList;
+    public ListsListAdapter(List<WekanList> newWekanList, String board_id) {
+        this.list_list = newWekanList;
+        this.board_id = board_id;
     }
 
 
@@ -43,19 +45,20 @@ public class ListsListAdapter extends RecyclerView.Adapter<ListCardViewHolder> {
     public void onBindViewHolder(ListCardViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.boards_list_title.setText(board_list.get(position).getTitle());
-        holder.currentBoard = board_list.get(position);
+        holder.boards_list_title.setText(list_list.get(position).getTitle());
+        holder.currentList = list_list.get(position);
+        holder.parentBoardId = board_id;
 
     }
 
     // Return the size of your data set (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return board_list.size();
+        return list_list.size();
     }
 
-    public void updateData(List<Board> newData){
-        board_list = newData;
+    public void updateData(List<WekanList> newData){
+        list_list = newData;
         this.notifyDataSetChanged();
     }
 }

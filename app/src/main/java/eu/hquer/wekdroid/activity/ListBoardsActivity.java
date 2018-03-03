@@ -24,7 +24,7 @@ public class ListBoardsActivity extends RecyclerActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_boards);
         mAdapter = new BoardsListAdapter(boardList);
-        recyclerView = obtainRecycler(R.id.cardList, mAdapter);
+        recyclerView = obtainRecycler(R.id.boardCardList, mAdapter);
         // Get the data
         retrieveBoards();
     }

@@ -3,4 +3,6 @@
     <string name="loading_page_hello">Loading ...</string>
     <string name="boards_name">Boards</string>
     <string name="lists_name">Lists</string>
+    <string name="card_name">Cards</string>
+    <string name="no_description">No description</string>
 </resources>

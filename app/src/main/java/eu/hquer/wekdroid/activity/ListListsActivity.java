@@ -12,7 +12,7 @@ import java.util.List;
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.adapter.ListsListAdapter;
 import eu.hquer.wekdroid.enums.ExtrasEnum;
-import eu.hquer.wekdroid.model.Board;
+import eu.hquer.wekdroid.model.WekanList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -21,7 +21,7 @@ public class ListListsActivity extends RecyclerActivity {
     String board_title;
     String board_id;
     private RecyclerView recyclerView;
-    List<Board> boardList = new ArrayList<>();
+    List<WekanList> listList = new ArrayList<WekanList>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +35,18 @@ public class ListListsActivity extends RecyclerActivity {
         board_id = intent.getExtras().getString(ExtrasEnum.board_id.getName());
         board_title = intent.getExtras().getString(ExtrasEnum.board_title.getName());
         // Set the recycler view and adapter
-        ListsListAdapter mAdapter = new ListsListAdapter(boardList);
-        recyclerView = obtainRecycler(R.id.cardList, mAdapter);
+        ListsListAdapter mAdapter = new ListsListAdapter(listList, board_id);
+        recyclerView = obtainRecycler(R.id.boardCardList, mAdapter);
         // retrieve data from server
         retrieveListsOfBoard(board_id);
     }
 
     public void retrieveListsOfBoard(String board_id){
-        Call<List<Board>> listCall = wekanService.getListOfBoards(board_id, token);
-        listCall.enqueue(new Callback<List<Board>>() {
+        Call<List<WekanList>> listCall = wekanService.getListOfBoards(board_id, token);
+        listCall.enqueue(new Callback<List<WekanList>>() {
             @Override
-            public void onResponse(Response<List<Board>> response) {
-                List<Board> listList = response.body();
+            public void onResponse(Response<List<WekanList>> response) {
+                List<WekanList> listList = response.body();
                 ListsListAdapter recyclerViewAdapter = (ListsListAdapter) recyclerView.getAdapter();
                 recyclerViewAdapter.updateData(listList);
             }
