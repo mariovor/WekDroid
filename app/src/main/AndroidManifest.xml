@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ListBoardsActivity"></activity>
+        <activity android:name=".activity.ListBoardsActivity" />
+        <activity android:name=".activity.ListListsActivity"></activity>
     </application>
 
 </manifest>

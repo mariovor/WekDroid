@@ -4,12 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.List;
 
 import eu.hquer.wekdroid.R;
-import eu.hquer.wekdroid.adapter.ViewHolder.BoardCardViewHolder;
+import eu.hquer.wekdroid.adapter.ViewHolder.ListCardViewHolder;
 import eu.hquer.wekdroid.model.Board;
 
 /**
@@ -18,30 +17,30 @@ import eu.hquer.wekdroid.model.Board;
  * Mostly stolen from https://developer.android.com/guide/topics/ui/layout/recyclerview.html
  */
 
-public class BoardsListAdapter extends RecyclerView.Adapter<BoardCardViewHolder> {
+public class ListsListAdapter extends RecyclerView.Adapter<ListCardViewHolder> {
     private List<Board> board_list;
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public BoardsListAdapter(List<Board> newList) {
+    public ListsListAdapter(List<Board> newList) {
         board_list = newList;
     }
 
 
     // Create new views (invoked by the layout manager)
     @Override
-    public BoardCardViewHolder onCreateViewHolder(ViewGroup viewGroup,
+    public ListCardViewHolder onCreateViewHolder(ViewGroup viewGroup,
                                                            int viewType) {
         // create a new view
         View v =  LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.board_list_card_layout, viewGroup, false);
-        BoardCardViewHolder vh = new BoardCardViewHolder(v);
+        ListCardViewHolder vh = new ListCardViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(BoardCardViewHolder holder, int position) {
+    public void onBindViewHolder(ListCardViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         holder.boards_list_title.setText(board_list.get(position).getTitle());

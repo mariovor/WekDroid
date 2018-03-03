@@ -1,7 +1,6 @@
 package eu.hquer.wekdroid.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
@@ -15,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListBoardsActivity extends BaseAcitvity {
+public class ListBoardsActivity extends RecyclerActivity {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     List<Board> boardList = new ArrayList<>();
@@ -24,23 +23,12 @@ public class ListBoardsActivity extends BaseAcitvity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_boards);
-        recyclerView = (RecyclerView) findViewById(R.id.cardList);
-
-        // use this setting to improve performance if you know that changes
-        // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(mLayoutManager);
-
-        // Set adapter
         mAdapter = new BoardsListAdapter(boardList);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView = obtainRecycler(R.id.cardList, mAdapter);
         // Get the data
         retrieveBoards();
     }
+
 
 
     public void retrieveBoards() {

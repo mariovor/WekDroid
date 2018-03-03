@@ -22,4 +22,7 @@ public interface WekanService {
 
     @GET("api/users/{id}/boards")
     Call<List<Board>> getBoards(@Path("id") String id, @Header("Authorization") String authHeader);
+
+    @GET("api/boards/{board_id}/lists")
+    Call<List<Board>> getListOfBoards(@Path("board_id") String board_id, @Header("Authorization") String authHeader);
 }
