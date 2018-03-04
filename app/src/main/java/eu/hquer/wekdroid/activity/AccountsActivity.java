@@ -56,7 +56,7 @@ public class AccountsActivity extends BaseAcitvity{
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username_form);
         mBaseUrl = (AutoCompleteTextView) findViewById(R.id.baseUrl);
 
-        if(!basePath.isEmpty()){
+        if(basePath!= null && !basePath.isEmpty()){
             mBaseUrl.setText(basePath);
         }
 
