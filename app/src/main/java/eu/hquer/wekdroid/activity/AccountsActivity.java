@@ -14,13 +14,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.List;
 
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.enums.AuthenticationEnum;
@@ -56,17 +53,17 @@ public class AccountsActivity extends BaseAcitvity{
         sharedPreferences = getSharedPreferences(SharedPrefEnum.BASE_PREF.getName(), Context.MODE_PRIVATE);
         basePath = sharedPreferences.getString(SharedPrefEnum.BASE_URL.getName(), null);
         // Set up the login form.
-        mUsernameView = (AutoCompleteTextView) findViewById(R.id.email);
+        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username_form);
         mBaseUrl = (AutoCompleteTextView) findViewById(R.id.baseUrl);
 
         if(!basePath.isEmpty()){
             mBaseUrl.setText(basePath);
         }
 
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView = (EditText) findViewById(R.id.password_form);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignInButton = (Button) findViewById(R.id.sign_in_button);
+        mSignInButton.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
                 attemptLogin();
             }
@@ -92,7 +89,7 @@ public class AccountsActivity extends BaseAcitvity{
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mUsernameView.getText().toString();
+        String username = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -106,7 +103,7 @@ public class AccountsActivity extends BaseAcitvity{
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
@@ -120,7 +117,7 @@ public class AccountsActivity extends BaseAcitvity{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password, mBaseUrl.getText().toString());
+            mAuthTask = new UserLoginTask(username, password, mBaseUrl.getText().toString());
             mAuthTask.execute((Void) null);
         }
     }
@@ -159,15 +156,6 @@ public class AccountsActivity extends BaseAcitvity{
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(AccountsActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mUsernameView.setAdapter(adapter);
     }
 
     /**
