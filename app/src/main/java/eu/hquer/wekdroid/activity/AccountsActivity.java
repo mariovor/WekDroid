@@ -19,19 +19,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.enums.AuthenticationEnum;
 import eu.hquer.wekdroid.enums.SharedPrefEnum;
-import eu.hquer.wekdroid.model.Token;
 import eu.hquer.wekdroid.model.User;
+import eu.hquer.wekdroid.model.WekanToken;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class AccountsActivity extends BaseAcitvity{
+public class AccountsActivity extends BaseAcitvity {
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -56,7 +57,7 @@ public class AccountsActivity extends BaseAcitvity{
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username_form);
         mBaseUrl = (AutoCompleteTextView) findViewById(R.id.baseUrl);
 
-        if(basePath!= null && !basePath.isEmpty()){
+        if (basePath != null && !basePath.isEmpty()) {
             mBaseUrl.setText(basePath);
         }
 
@@ -164,6 +165,8 @@ public class AccountsActivity extends BaseAcitvity{
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        protected String errorMessage;
+
         private final String mUsername;
         private final String mPassword;
 
@@ -186,30 +189,27 @@ public class AccountsActivity extends BaseAcitvity{
             User user = new User();
             user.setUsername(mUsername);
             user.setPassword(mPassword);
-            Call<Token> authenticateResponse = wekanService.authenticate(user);
+            Call<WekanToken> authenticateCall = wekanService.authenticate(user);
 
-            authenticateResponse.enqueue(new Callback<Token>() {
-                @Override
-                public void onResponse(Response<Token> response) {
-                    String tokenText = response.body().getToken();
-                    userId = response.body().getId();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(SharedPrefEnum.USER_ID.getName(), userId);
-                    editor.apply();
-                    //todo Save it in preferences
-                    token = String.format("Bearer %s", tokenText);
-                    createAccount(mUsername, mPassword, token);
-                    startActivity(new Intent(AccountsActivity.this, MainActivity.class));
+            try {
+                Response<WekanToken> execute = authenticateCall.execute();
+                if (execute.body() == null) {
+                    errorMessage = String.format("Code %s/ %s", execute.raw().code(), execute.raw().message());
+                    return false;
                 }
-
-                @Override
-                public void onFailure(Throwable t) {
-                    Toast.makeText(AccountsActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-            return true;
+                String tokenText = token = execute.body().getToken();
+                userId = execute.body().getId();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(SharedPrefEnum.USER_ID.getName(), userId);
+                editor.apply();
+                token = String.format("Bearer %s", tokenText);
+                createAccount(mUsername, mPassword, token);
+                startActivity(new Intent(AccountsActivity.this, MainActivity.class));
+            } catch (IOException e) {
+                errorMessage = e.getMessage();
+                return false;
+            }
+            return false;
         }
 
         @Override
@@ -220,8 +220,7 @@ public class AccountsActivity extends BaseAcitvity{
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                Toast.makeText(AccountsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         }
 

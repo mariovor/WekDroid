@@ -63,19 +63,19 @@ public class MainActivity extends BaseAcitvity {
 // Use accounts[0] (or whatever number of account) after checking that accounts.length &gt; 1}
 
 
-//    private Call<Token> authenticate(WekanService wekanService) {
+//    private Call<WekanToken> authenticate(WekanService wekanService) {
 //        User user = new User();
 //        user.setUsername("mariovor");
 //        user.setPassword("Start123");
-//        Call<Token> call = wekanService.authenticate(user);
+//        Call<WekanToken> call = wekanService.authenticate(user);
 //        return call;
 //    }
 
 //    public void authenticate() {
-//        Call<Token> authenticateResponse = authenticate(wekanService);
-//        authenticateResponse.enqueue(new Callback<Token>() {
+//        Call<WekanToken> authenticateResponse = authenticate(wekanService);
+//        authenticateResponse.enqueue(new Callback<WekanToken>() {
 //            @Override
-//            public void onResponse(Response<Token> response) {
+//            public void onResponse(Response<WekanToken> response) {
 //                String tokenText = response.body().getToken();
 //                userId = response.body().getId();
 //                token = String.format("Bearer %s", tokenText);

@@ -40,7 +40,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_baseUrl"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:text="https://" />
 
             </android.support.design.widget.TextInputLayout>
             <android.support.design.widget.TextInputLayout
