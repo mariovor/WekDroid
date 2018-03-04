@@ -5,9 +5,7 @@ import android.accounts.AccountManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +20,7 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import eu.hquer.wekdroid.R;
+import eu.hquer.wekdroid.WekanService;
 import eu.hquer.wekdroid.enums.AuthenticationEnum;
 import eu.hquer.wekdroid.enums.SharedPrefEnum;
 import eu.hquer.wekdroid.model.User;
@@ -45,14 +44,12 @@ public class AccountsActivity extends BaseAcitvity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    SharedPreferences sharedPreferences;//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-        sharedPreferences = getSharedPreferences(SharedPrefEnum.BASE_PREF.getName(), Context.MODE_PRIVATE);
-        basePath = sharedPreferences.getString(SharedPrefEnum.BASE_URL.getName(), null);
+        basePath = getWekanSharedPreferencesString(SharedPrefEnum.BASE_URL.getName());
         // Set up the login form.
         mUsernameView = (AutoCompleteTextView) findViewById(R.id.username_form);
         mBaseUrl = (AutoCompleteTextView) findViewById(R.id.baseUrl);
@@ -175,21 +172,21 @@ public class AccountsActivity extends BaseAcitvity {
             mPassword = password;
             basePath = mBaseUrl.getText().toString();
             // Store baseURL
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(SharedPrefEnum.BASE_URL.getName(), basePath);
-            editor.apply();
+            setWekanSharedPreferencesString(SharedPrefEnum.BASE_URL.getName(), basePath);
 
             createService();
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
+        protected User obtainWekanUser(String username, String Password) {
             User user = new User();
             user.setUsername(mUsername);
             user.setPassword(mPassword);
-            Call<WekanToken> authenticateCall = wekanService.authenticate(user);
+            return user;
+        }
+
+        protected Boolean executeWekanLogin(String username, String password, WekanService wekanService) {
+
+            Call<WekanToken> authenticateCall = wekanService.authenticate(obtainWekanUser(username, password));
 
             try {
                 Response<WekanToken> execute = authenticateCall.execute();
@@ -197,19 +194,29 @@ public class AccountsActivity extends BaseAcitvity {
                     errorMessage = String.format("Code %s/ %s", execute.raw().code(), execute.raw().message());
                     return false;
                 }
-                String tokenText = token = execute.body().getToken();
+                // Store userID
                 userId = execute.body().getId();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(SharedPrefEnum.USER_ID.getName(), userId);
-                editor.apply();
-                token = String.format("Bearer %s", tokenText);
+                setWekanSharedPreferencesString(SharedPrefEnum.USER_ID.getName(), userId);
+                // Get the token and add the Bearer prefix
+                String rawToken =  execute.body().getToken();
+                token = String.format("Bearer %s", rawToken);
+                // Create Android account w/ token
                 createAccount(mUsername, mPassword, token);
+                // after creating account, go back to MainActivity
                 startActivity(new Intent(AccountsActivity.this, MainActivity.class));
             } catch (IOException e) {
                 errorMessage = e.getMessage();
                 return false;
             }
-            return false;
+            return true;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+            Boolean result = executeWekanLogin(mUsername, mPassword, wekanService);
+
+            return result;
         }
 
         @Override
@@ -220,7 +227,7 @@ public class AccountsActivity extends BaseAcitvity {
             if (success) {
                 finish();
             } else {
-                Toast.makeText(AccountsActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AccountsActivity.this, errorMessage, Toast.LENGTH_LONG).show();
             }
         }
 
