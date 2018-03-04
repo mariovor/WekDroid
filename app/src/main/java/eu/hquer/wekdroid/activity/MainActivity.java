@@ -51,7 +51,6 @@ public class MainActivity extends BaseAcitvity {
                         }
                     }
                 }, null);
-                int d = 3;
             } else {
                 startActivity(new Intent(this, AccountsActivity.class));
             }
@@ -59,40 +58,4 @@ public class MainActivity extends BaseAcitvity {
             startActivity(new Intent(MainActivity.this, ListBoardsActivity.class));
         }
     }
-
-// Use accounts[0] (or whatever number of account) after checking that accounts.length &gt; 1}
-
-
-//    private Call<WekanToken> authenticate(WekanService wekanService) {
-//        User user = new User();
-//        user.setUsername("mariovor");
-//        user.setPassword("Start123");
-//        Call<WekanToken> call = wekanService.authenticate(user);
-//        return call;
-//    }
-
-//    public void authenticate() {
-//        Call<WekanToken> authenticateResponse = authenticate(wekanService);
-//        authenticateResponse.enqueue(new Callback<WekanToken>() {
-//            @Override
-//            public void onResponse(Response<WekanToken> response) {
-//                String tokenText = response.body().getToken();
-//                userId = response.body().getId();
-//                token = String.format("Bearer %s", tokenText);
-//                Toast.makeText(MainActivity.this, token, Toast.LENGTH_SHORT).show();
-//                if (token != null) {
-//                    Intent intent = new Intent(getApplicationContext(), ListBoardsActivity.class);
-//                    startActivity(intent);
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable t) {
-//                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//    }
 }
