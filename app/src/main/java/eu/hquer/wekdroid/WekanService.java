@@ -4,7 +4,7 @@ import java.util.List;
 
 import eu.hquer.wekdroid.model.Board;
 import eu.hquer.wekdroid.model.Card;
-import eu.hquer.wekdroid.model.Token;
+import eu.hquer.wekdroid.model.WekanToken;
 import eu.hquer.wekdroid.model.User;
 import eu.hquer.wekdroid.model.WekanList;
 import retrofit2.Call;
@@ -20,7 +20,7 @@ import retrofit2.http.Path;
 
 public interface WekanService {
     @POST("users/login")
-    Call<Token> authenticate(@Body User user);
+    Call<WekanToken> authenticate(@Body User user);
 
     @GET("api/users/{id}/boards")
     Call<List<Board>> getBoards(@Path("id") String id, @Header("Authorization") String authHeader);
