@@ -31,7 +31,8 @@
         <activity android:name=".activity.ListBoardsActivity" />
         <activity android:name=".activity.ListListsActivity" />
         <activity android:name=".activity.ListCardActivity" />
-        <activity android:name=".activity.AccountsActivity" />
+        <activity android:name=".activity.AccountsActivity"
+                  android:label="@string/title_activity_account"/>
 
         <service
             android:name=".AuthenticationService"
@@ -46,9 +47,6 @@
                 android:resource="@xml/authenticator" />
         </service>
 
-        <activity
-            android:name=".AccountActivity"
-            android:label="@string/title_activity_account"></activity>
     </application>
 
 </manifest>
