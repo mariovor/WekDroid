@@ -13,7 +13,7 @@ import retrofit2.Retrofit;
 public class BaseAcitvity extends AppCompatActivity {
     static Retrofit retrofit;
     static WekanService wekanService;
-    final private String basePath = "http://192.168.1.2";
+    static String basePath; // = "http://192.168.1.2";
     static String userId = null;
     static String token = null;
 

@@ -6,8 +6,11 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -31,6 +34,7 @@ import java.util.List;
 
 import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.enums.AuthenticationEnum;
+import eu.hquer.wekdroid.enums.SharedPrefEnum;
 import eu.hquer.wekdroid.model.Token;
 import eu.hquer.wekdroid.model.User;
 import retrofit2.Call;
@@ -53,17 +57,26 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mUsernameView;
+    private AutoCompleteTextView mBaseUrl;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    SharedPreferences sharedPreferences;//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        sharedPreferences = getSharedPreferences(SharedPrefEnum.BASE_PREF.getName(), Context.MODE_PRIVATE);
+        basePath = sharedPreferences.getString(SharedPrefEnum.BASE_URL.getName(), null);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mUsernameView = (AutoCompleteTextView) findViewById(R.id.email);
+        mBaseUrl = (AutoCompleteTextView) findViewById(R.id.baseUrl);
+
+        if(!basePath.isEmpty()){
+            mBaseUrl.setText(basePath);
+        }
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -101,11 +114,11 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
         }
 
         // Reset errors.
-        mEmailView.setError(null);
+        mUsernameView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String email = mUsernameView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -120,8 +133,8 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mUsernameView.setError(getString(R.string.error_field_required));
+            focusView = mUsernameView;
             cancel = true;
         }
 
@@ -133,7 +146,7 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(email, password, mBaseUrl.getText().toString());
             mAuthTask.execute((Void) null);
         }
     }
@@ -214,7 +227,7 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
                 new ArrayAdapter<>(AccountsActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        mUsernameView.setAdapter(adapter);
     }
 
 
@@ -237,9 +250,16 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
         private final String mUsername;
         private final String mPassword;
 
-        UserLoginTask(String username, String password) {
+        UserLoginTask(String username, String password, String baseUrl) {
             mUsername = username;
             mPassword = password;
+            basePath = mBaseUrl.getText().toString();
+            // Store baseURL
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(SharedPrefEnum.BASE_URL.getName(), basePath);
+            editor.apply();
+
+            createService();
         }
 
         @Override
@@ -256,9 +276,13 @@ public class AccountsActivity extends BaseAcitvity implements LoaderCallbacks<Cu
                 public void onResponse(Response<Token> response) {
                     String tokenText = response.body().getToken();
                     userId = response.body().getId();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(SharedPrefEnum.USER_ID.getName(), userId);
+                    editor.apply();
                     //todo Save it in preferences
                     token = String.format("Bearer %s", tokenText);
                     createAccount(mUsername, mPassword, token);
+                    startActivity(new Intent(AccountsActivity.this, MainActivity.class));
                 }
 
                 @Override

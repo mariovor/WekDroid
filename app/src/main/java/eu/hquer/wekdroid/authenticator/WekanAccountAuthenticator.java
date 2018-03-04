@@ -63,11 +63,6 @@ public class WekanAccountAuthenticator extends AbstractAccountAuthenticator {
 
         String authToken = am.peekAuthToken(account, authTokenType);
 
-//        if (TextUtils.isEmpty(authToken)) {
-//            authToken = HTTPNetwork.login(account.name, am.getPassword(account));
-//        }
-
-
         if (!TextUtils.isEmpty(authToken)) {
             final Bundle result = new Bundle();
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name);
