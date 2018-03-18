@@ -9,7 +9,6 @@
         android:name="android.permission.GET_ACCOUNTS"
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission
         android:name="android.permission.USE_CREDENTIALS"
         android:maxSdkVersion="22" />
@@ -31,8 +30,9 @@
         <activity android:name=".activity.ListBoardsActivity" />
         <activity android:name=".activity.ListListsActivity" />
         <activity android:name=".activity.ListCardActivity" />
-        <activity android:name=".activity.AccountsActivity"
-                  android:label="@string/title_activity_account"/>
+        <activity
+            android:name=".activity.AccountsActivity"
+            android:label="@string/title_activity_account" />
 
         <service
             android:name=".AuthenticationService"
@@ -47,6 +47,7 @@
                 android:resource="@xml/authenticator" />
         </service>
 
+        <activity android:name=".activity.CardActivity"></activity>
     </application>
 
 </manifest>
