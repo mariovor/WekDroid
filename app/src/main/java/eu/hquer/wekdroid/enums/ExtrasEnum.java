@@ -4,7 +4,8 @@ public enum ExtrasEnum {
     board_title("board_title"),
     board_id("board_id"),
     list_title("list_title"),
-    list_id("list_id");
+    list_id("list_id"),
+    card_object("card_object");
 
     String packageName = "eu.hquer.wekdroid";
     String name;
