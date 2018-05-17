@@ -18,9 +18,12 @@ public class CardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_card);
         Intent intent = getIntent();
-        Card card = intent.getParcelableExtra(ExtrasEnum.card_object.getName());
+        Card card = intent.getExtras().getParcelable(ExtrasEnum.card_object.getName());
 
-        TextView titleText  = findViewById(id.card_list_board_title);
+        TextView titleText  = findViewById(id.activity_card_title);
         titleText.setText(card.getTitle());
+
+        TextView descriptionText = findViewById(id.activity_card_description);
+        descriptionText.setText(card.getDescription());
     }
 }
