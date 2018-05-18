@@ -7,11 +7,10 @@ android:
     - platform-tools
 
     # The BuildTools version used by your project
-    - build-tools-26.1.0
-    - build-tools-26.0.2
+    - build-tools-27.0.3
 
      # The SDK version used to compile your project
-    - android-26
+    - android-27
 
 script:
   - ls -lh && ./gradlew build
@@ -29,4 +28,3 @@ licenses:
     - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
-    - 'build-tools.+'
