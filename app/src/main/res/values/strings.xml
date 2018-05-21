@@ -23,6 +23,8 @@
     </string>
 
     <!--Card Text-->
-    <string name="archived">Archive it</string>
+    <string name="archived">Archived</string>
+    <string name="update_success">Update successful</string>
+    <string name="update_card">Update Card</string>
 
 </resources>

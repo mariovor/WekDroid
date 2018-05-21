@@ -7,6 +7,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import eu.hquer.wekdroid.R;
 import eu.hquer.wekdroid.enums.ExtrasEnum;
 import eu.hquer.wekdroid.model.Card;
 import retrofit2.Call;
@@ -58,5 +59,39 @@ public class CardActivity extends BaseAcitvity {
 
         // Set the progress bar to invisible
         findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+    }
+
+    public void updateCard(View view){
+        TextView titleText  = findViewById(id.activity_card_title);
+        card.setTitle(titleText.getText().toString());
+
+        TextView descriptionText = findViewById(id.activity_card_description);
+        card.setDescription(descriptionText.getText().toString());
+
+        CheckBox checkBox = findViewById(id.activity_card_archived);
+        card.setArchived(checkBox.isChecked());
+
+        // Set the progress bar to invisible
+        findViewById(id.activity_card_progress).setVisibility(View.VISIBLE);
+
+        Call<Card> updateCardCall = wekanService.updateCard(card.getBoardId(), card.getListId(), card.get_id(), card, token);
+
+        updateCardCall.enqueue(new Callback<Card>() {
+            @Override
+            public void onResponse(Response<Card> response) {
+                // Set the progress bar to invisible
+                findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+                Toast.makeText(CardActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                // Set the progress bar to invisible
+                findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+                Toast.makeText(CardActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

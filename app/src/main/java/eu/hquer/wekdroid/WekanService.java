@@ -4,14 +4,15 @@ import java.util.List;
 
 import eu.hquer.wekdroid.model.Board;
 import eu.hquer.wekdroid.model.Card;
-import eu.hquer.wekdroid.model.WekanToken;
 import eu.hquer.wekdroid.model.User;
 import eu.hquer.wekdroid.model.WekanList;
+import eu.hquer.wekdroid.model.WekanToken;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -33,4 +34,7 @@ public interface WekanService {
 
     @GET("api/boards/{board_id}/lists/{list_id}/cards/{card_id}")
     Call<Card> getCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Path("card_id") String card_id,  @Header("Authorization") String authHeader);
+
+    @PUT("api/boards/{board_id}/lists/{list_id}/cards/{card_id}")
+    Call<Card> updateCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Path("card_id") String card_id, @Body Card card,  @Header("Authorization") String authHeader);
 }
