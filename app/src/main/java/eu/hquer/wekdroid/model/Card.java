@@ -11,11 +11,20 @@ public class Card implements Parcelable {
     String _id;
     String title;
     String description;
+    String boardId;
+    String listId;
+    String swimlaneId;
+    Boolean archived;
+
 
     protected Card(Parcel in) {
         _id = in.readString();
         title = in.readString();
         description = in.readString();
+        boardId = in.readString();
+        listId = in.readString();
+        swimlaneId = in.readString();
+        archived = Boolean.getBoolean(in.readString());
     }
 
     public static final Creator<Card> CREATOR = new Creator<Card>() {
@@ -40,6 +49,15 @@ public class Card implements Parcelable {
         parcel.writeString(_id);
         parcel.writeString(title);
         parcel.writeString(description);
+        parcel.writeString(boardId);
+        parcel.writeString(listId);
+        parcel.writeString(swimlaneId);
+        if (archived == null) {
+            parcel.writeString("false");
+        } else {
+            parcel.writeString(archived.toString());
+        }
+
     }
 
     public String get_id() {
@@ -66,4 +84,35 @@ public class Card implements Parcelable {
         this.description = description;
     }
 
+    public String getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(String boardId) {
+        this.boardId = boardId;
+    }
+
+    public String getListId() {
+        return listId;
+    }
+
+    public void setListId(String listId) {
+        this.listId = listId;
+    }
+
+    public String getSwimlaneId() {
+        return swimlaneId;
+    }
+
+    public void setSwimlaneId(String swimlaneId) {
+        this.swimlaneId = swimlaneId;
+    }
+
+    public Boolean getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Boolean archived) {
+        this.archived = archived;
+    }
 }
