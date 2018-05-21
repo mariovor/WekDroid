@@ -2,6 +2,7 @@ package eu.hquer.wekdroid.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +28,7 @@ public class CardActivity extends BaseAcitvity {
         card = intent.getExtras().getParcelable(ExtrasEnum.card_object.getName());
 
         // Get the details of the card
-
         Call<Card> cardCall = wekanService.getCard(card.getBoardId(), card.getListId(), card.get_id(), token);
-
         cardCall.enqueue(new Callback<Card>() {
                              @Override
                              public void onResponse(Response<Card> response) {
@@ -56,5 +55,8 @@ public class CardActivity extends BaseAcitvity {
 
         CheckBox checkBox = findViewById(id.activity_card_archived);
         checkBox.setChecked(card.getArchived());
+
+        // Set the progress bar to invisible
+        findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
     }
 }
