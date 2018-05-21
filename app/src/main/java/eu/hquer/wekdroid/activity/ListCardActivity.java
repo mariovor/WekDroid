@@ -41,7 +41,6 @@ public class ListCardActivity extends RecyclerActivity {
             @Override
             public void onResponse(Response<List<Card>> response) {
                 List<Card> cardList = response.body();
-                int i = 3;
                 CardListAdapter recyclerViewAdapter = (CardListAdapter) recyclerView.getAdapter();
                 recyclerViewAdapter.updateData(cardList);
             }

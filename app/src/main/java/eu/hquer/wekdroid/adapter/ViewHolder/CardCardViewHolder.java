@@ -16,8 +16,6 @@ import eu.hquer.wekdroid.model.Card;
 
 public class CardCardViewHolder extends RecyclerView.ViewHolder {
     public Card currentCard;
-    public String parentBoardId;
-    public String parentListId;
 
     public TextView cardTitleTextView;
     public TextView cardDescriptionTextView;
