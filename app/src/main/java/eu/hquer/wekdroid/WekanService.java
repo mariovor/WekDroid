@@ -37,7 +37,7 @@ public interface WekanService {
     Call<List<Card>> getListOfCards(@Path("board_id") String board_id, @Path("list_id") String list_id, @Header("Authorization") String authHeader);
 
     @POST("api/boards/{board_id}/lists/{list_id}/cards")
-    Call<List<Card>> AddCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Body Card card, @Header("Authorization") String authHeader);
+    Call<Card> addCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Body Card card, @Header("Authorization") String authHeader);
 
     @GET("api/boards/{board_id}/lists/{list_id}/cards/{card_id}")
     Call<Card> getCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Path("card_id") String card_id,  @Header("Authorization") String authHeader);

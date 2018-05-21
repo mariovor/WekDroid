@@ -35,9 +35,12 @@ public class CardActivity extends BaseAcitvity {
         card = intent.getExtras().getParcelable(ExtrasEnum.card_object.getName());
         // Get all swim lanes for this board and set it
         setSwimlaneSpiner();
-        // Get all details of the card
-        getCardDetails();
-
+        // Get all details of the card (only if it already exits)
+        if (card.get_id() != null) {
+            getCardDetails();
+        } else {
+            findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+        }
 
     }
 
@@ -90,8 +93,8 @@ public class CardActivity extends BaseAcitvity {
 
             // Set the selected swim lane to the of the card
             if (card.getSwimlaneId() != null) {
-                for (int i = 0; i < swimlaneList.size(); i++){
-                    if (card.getSwimlaneId().equals(swimlaneList.get(i).get_id())){
+                for (int i = 0; i < swimlaneList.size(); i++) {
+                    if (card.getSwimlaneId().equals(swimlaneList.get(i).get_id())) {
                         spinner.setSelection(i);
                         break;
                     }
@@ -116,7 +119,7 @@ public class CardActivity extends BaseAcitvity {
         findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
     }
 
-    public void updateCard(View view) {
+    public void updateOrCreateCard(View view) {
         TextView titleText = findViewById(id.activity_card_title);
         card.setTitle(titleText.getText().toString());
 
@@ -132,6 +135,15 @@ public class CardActivity extends BaseAcitvity {
         // Set the progress bar to invisible
         findViewById(id.activity_card_progress).setVisibility(View.VISIBLE);
 
+        if (card.get_id() != null) {
+            updateCard();
+        } else {
+            createCard();
+        }
+
+    }
+
+    private void updateCard() {
         Call<Card> updateCardCall = wekanService.updateCard(card.getBoardId(), card.getListId(), card.get_id(), card, token);
 
         updateCardCall.enqueue(new Callback<Card>() {
@@ -150,6 +162,27 @@ public class CardActivity extends BaseAcitvity {
                 failToast(t);
             }
         });
+    }
 
+    private void createCard() {
+        Call<Card> addCardCall = wekanService.addCard(card.getBoardId(), card.getListId(), card, token);
+        addCardCall.enqueue(new Callback<Card>() {
+            @Override
+            public void onResponse(Response<Card> response) {
+                if (response.body() != null) {
+                    card.set_id(response.body().get_id());
+                    findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+                    Toast.makeText(CardActivity.this, getString(R.string.update_success), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(CardActivity.this, response.message(), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                failToast(t);
+            }
+        });
     }
 }

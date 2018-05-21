@@ -9,6 +9,7 @@ import android.os.Parcelable;
 
 public class Card implements Parcelable {
     String _id;
+    String authorId;
     String title;
     String description;
     String boardId;
@@ -16,9 +17,14 @@ public class Card implements Parcelable {
     String swimlaneId;
     Boolean archived;
 
+    public Card(){
+
+    }
+
 
     protected Card(Parcel in) {
         _id = in.readString();
+        authorId = in.readString();
         title = in.readString();
         description = in.readString();
         boardId = in.readString();
@@ -47,6 +53,7 @@ public class Card implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(_id);
+        parcel.writeString(authorId);
         parcel.writeString(title);
         parcel.writeString(description);
         parcel.writeString(boardId);
@@ -66,6 +73,14 @@ public class Card implements Parcelable {
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 
     public String getTitle() {
