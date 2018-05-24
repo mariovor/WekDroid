@@ -21,4 +21,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+
+    <!--Card Text-->
+    <string name="archived">Archived</string>
+    <string name="update_success">Update successful</string>
+    <string name="update_card">Update Card</string>
+
 </resources>
