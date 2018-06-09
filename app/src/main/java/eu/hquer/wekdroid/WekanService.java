@@ -10,6 +10,7 @@ import eu.hquer.wekdroid.model.WekanList;
 import eu.hquer.wekdroid.model.WekanToken;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -44,4 +45,7 @@ public interface WekanService {
 
     @PUT("api/boards/{board_id}/lists/{list_id}/cards/{card_id}")
     Call<Card> updateCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Path("card_id") String card_id, @Body Card card,  @Header("Authorization") String authHeader);
+
+    @DELETE("api/boards/{board_id}/lists/{list_id}/cards/{card_id}")
+    Call<Card> deleteCard(@Path("board_id") String board_id, @Path("list_id") String list_id, @Path("card_id") String card_id, @Header("Authorization") String authHeader);
 }

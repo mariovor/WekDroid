@@ -60,7 +60,11 @@ public class CardActivity extends BaseAcitvity {
     }
 
     private void failToast(Throwable t) {
-        Toast.makeText(CardActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+        thisToast(t.getMessage());
+    }
+
+    private void thisToast(String message){
+        Toast.makeText(CardActivity.this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void getCardDetails() {
@@ -157,6 +161,36 @@ public class CardActivity extends BaseAcitvity {
         });
     }
 
+    public void deleteCard(View view) {
+
+        if(card.get_id()==null){
+            // We are currently creating a card, we cannot delete...
+            thisToast(getString(R.string.create_cannot_delete));
+            return;
+        }
+
+        Call<Card> deleteCardCall = wekanService.deleteCard(card.getBoardId(), card.getListId(), card.get_id(), token);
+
+        deleteCardCall.enqueue(new Callback<Card>() {
+            @Override
+            public void onResponse(Response<Card> response) {
+                // Set the progress bar to invisible
+                findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+                Toast.makeText(CardActivity.this, getString(R.string.delete_success), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getBaseContext(), ListCardActivity.class);
+                intent.putExtra(ExtrasEnum.list_id.getName(), card.getListId());
+                intent.putExtra(ExtrasEnum.board_id.getName(), card.getBoardId());
+                getBaseContext().startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                // Set the progress bar to invisible
+                findViewById(id.activity_card_progress).setVisibility(View.INVISIBLE);
+                failToast(t);
+            }
+        });
+    }
     private void createCard() {
         Call<Card> addCardCall = wekanService.addCard(card.getBoardId(), card.getListId(), card, token);
         addCardCall.enqueue(new Callback<Card>() {
