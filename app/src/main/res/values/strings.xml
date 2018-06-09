@@ -25,6 +25,9 @@
     <!--Card Text-->
     <string name="archived">Archived</string>
     <string name="update_success">Update successful</string>
+    <string name="delete_success">Delete successful</string>
+    <string name="create_cannot_delete">There is no card to delete yet</string>
     <string name="update_card">Update Card</string>
+    <string name="delete_card">Delete Card</string>
 
 </resources>
