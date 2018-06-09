@@ -55,8 +55,8 @@ public class CardListAdapter extends RecyclerView.Adapter<CardCardViewHolder> {
             holder.cardDescriptionTextView.setText(description);
         }
         holder.currentCard = card_list.get(position);
-        holder.parentBoardId = parent_board_id;
-        holder.parentListId = parent_list_id;
+        holder.currentCard.setBoardId(parent_board_id);
+        holder.currentCard.setListId(parent_list_id);
     }
 
     // Return the size of your data set (invoked by the layout manager)
