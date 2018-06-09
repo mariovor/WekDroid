@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -110,9 +109,6 @@ public class CardActivity extends BaseAcitvity {
         TextView descriptionText = findViewById(id.activity_card_description);
         descriptionText.setText(card.getDescription());
 
-        CheckBox checkBox = findViewById(id.activity_card_archived);
-        checkBox.setChecked(card.getArchived());
-
         updateSwimlaneSpinner();
 
         // Set the progress bar to invisible
@@ -125,9 +121,6 @@ public class CardActivity extends BaseAcitvity {
 
         TextView descriptionText = findViewById(id.activity_card_description);
         card.setDescription(descriptionText.getText().toString());
-
-        CheckBox checkBox = findViewById(id.activity_card_archived);
-        card.setArchived(checkBox.isChecked());
 
         Spinner spinner = findViewById(id.activity_card_swimlanes);
         card.setSwimlaneId(swimlaneList.get(spinner.getSelectedItemPosition()).get_id());

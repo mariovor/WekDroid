@@ -26,5 +26,6 @@
     <string name="archived">Archived</string>
     <string name="update_success">Update successful</string>
     <string name="update_card">Update Card</string>
+    <string name="delete_card">Delete Card</string>
 
 </resources>
